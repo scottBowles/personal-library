@@ -37,12 +37,27 @@ function addPropertiesToRow(book, row) {
     const newCell = document.createElement('td');
     newCell.textContent = book[property];
     row.appendChild(newCell);
-  })
+  });
 };
+
+function addRemoveButtonToRow(book, row) {
+  const newCell = document.createElement('td');
+  row.appendChild(newCell);
+  const removeButton = document.createElement('button');
+  removeButton.textContent = 'Remove';
+  newCell.appendChild(removeButton);
+
+  removeButton.addEventListener('click', (e) => {
+    const bookIndex = myLibrary.indexOf(book);
+    myLibrary.splice(bookIndex, 1);
+    row.remove();
+  })
+}
 
 function renderNewBook(book) {
   const newRow = createNewRow();
   addPropertiesToRow(book, newRow);
+  addRemoveButtonToRow(book, newRow);
 }
 
 function renderLibrary(myLibrary) {
@@ -60,9 +75,9 @@ function createBookFromForm() {
 };
 
 function clearForm() {
-  titleField.value = "";
+  titleField.value = null;
   authorField.value = null;
-  pages.value = undefined;
+  pages.value = null;
   readField.checked = false;
   notYetReadField.checked = false;
 }
