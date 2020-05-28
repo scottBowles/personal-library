@@ -14,11 +14,18 @@ function Book({ title, author, pages, read }) {
   this.author = author
   this.pages = pages
   this.read = read
-  this.readDisplay = this.read ? "Read" : "Not yet read";
 }
 
 Book.prototype.info = function() {
   return `${title} by ${author}, ${pages} pages, ${this.read ? "read" : "not read yet"}`
+}
+
+Book.prototype.getReadDisplay = function () {
+  return this.read ? "Read" : "Not yet read";
+}
+
+Book.prototype.toggleRead = function () {
+  this.read = this.read ? false : true; 
 }
 
 function addBookToLibrary(newBook) {
@@ -32,10 +39,10 @@ function createNewRow() {
 }
 
 function addPropertiesToRow(book, row) {
-  const bookProperties = ["title", "author", "pages", "readDisplay"];
+  const bookProperties = ["title", "author", "pages", "read"];
   bookProperties.forEach((property) => {
     const newCell = document.createElement('td');
-    newCell.textContent = book[property];
+    newCell.textContent = property !== "read" ? book[property] : book.getReadDisplay();
     row.appendChild(newCell);
   });
 };
@@ -54,9 +61,25 @@ function addRemoveButtonToRow(book, row) {
   })
 }
 
+function addReadToggleButtonToRow(book, row) {
+  const newCell = document.createElement('td');
+  row.appendChild(newCell);
+  const toggleReadButton = document.createElement('button');
+  toggleReadButton.textContent = book.read ? "Mark Unread" : "Mark Read";
+  newCell.appendChild(toggleReadButton);
+
+  toggleReadButton.addEventListener('click', () => {
+    const readCell = [...row.children].find(e => e.textContent === book.getReadDisplay());
+    book.toggleRead();
+    readCell.textContent = book.getReadDisplay();
+    toggleReadButton.textContent = book.read ? "Mark Unread" : "Mark Read";
+  })
+}
+
 function renderNewBook(book) {
   const newRow = createNewRow();
   addPropertiesToRow(book, newRow);
+  addReadToggleButtonToRow(book, newRow);
   addRemoveButtonToRow(book, newRow);
 }
 
