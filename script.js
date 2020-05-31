@@ -103,6 +103,7 @@ function addRemoveButtonToRow(book, row) {
     if (localStorageAvailable)
       localStorage.setItem("myLibrary", JSON.stringify(myLibrary));
     row.remove();
+    if (myLibrary.length === 0) table.classList.add("hidden");
   });
 }
 
@@ -130,9 +131,12 @@ function renderNewBook(book) {
   addPropertiesToRow(book, newRow);
   addReadToggleButtonToRow(book, newRow);
   addRemoveButtonToRow(book, newRow);
+  table.classList.remove("hidden");
 }
 
 function renderLibrary(myLibrary) {
+  if (myLibrary.length === 0) table.classList.add("hidden");
+  else table.classList.remove("hidden");
   myLibrary.forEach(renderNewBook);
 }
 
@@ -169,6 +173,7 @@ addBook.addEventListener("click", (e) => {
   clearForm();
 });
 
+// // Populate myLibrary to test
 // const LOTR = new Book({
 //   title: "LOTR",
 //   author: "Tolkien",
