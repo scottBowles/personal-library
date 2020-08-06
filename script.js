@@ -164,13 +164,27 @@ openBookForm.addEventListener("click", () => {
 });
 
 addBook.addEventListener("click", (e) => {
-  e.preventDefault();
-  openBookForm.classList.remove("hidden");
-  bookForm.classList.add("hidden");
-  newBook = createBookFromForm();
-  addBookToLibrary(newBook);
-  renderNewBook(newBook);
-  clearForm();
+  console.log({
+    titleActual: titleField.textContent,
+    title: titleField.validity.valid,
+    author: authorField.validity.valid,
+    pages: pagesField.validity.valid,
+  });
+  let isValid = true;
+  [titleField, authorField, pagesField].forEach((field) => {
+    if (!field.validity.valid) {
+      isValid = false;
+    }
+  });
+  if (isValid) {
+    e.preventDefault();
+    openBookForm.classList.remove("hidden");
+    bookForm.classList.add("hidden");
+    newBook = createBookFromForm();
+    addBookToLibrary(newBook);
+    renderNewBook(newBook);
+    clearForm();
+  }
 });
 
 // // Populate myLibrary to test
